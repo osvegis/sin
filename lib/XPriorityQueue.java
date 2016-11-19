@@ -8,6 +8,9 @@ import java.util.*;
 
 /**
  * Cola de prioridad.
+ * <p>Esta clase es necesaria porque la clase
+ * {@code java.util.PriorityQueue'} no es apropiada para
+ * implementar el algoritmo de búsqueda heurística (A*).
  * @param <T> Tipo de los elementos almacenados en el conjunto.
  */
 public class XPriorityQueue<T extends Comparable<T>> implements Iterable<T>
@@ -141,4 +144,4 @@ public int size()
     return set.iterator();
 }
 
-} // ColaPrioridad
+} // XPriorityQueue

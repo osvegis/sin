@@ -8,6 +8,13 @@ import java.util.*;
 
 /**
  * Conjunto para implementar ejemplos de Sistemas Inteligentes.
+ * <p>El control de estados repetidos en una búsqueda no informada
+ * se puede hacer con la clase {@code java.util.HashSet}, pero
+ * en el caso de la búsqueda en profundidad, además de comprobar
+ * si un estado está repetido, hay que ver si se ha llegado a él
+ * con una profundidad menor, porque en tal caso, hay que borrar
+ * el estado que había en el conjunto, y añadir el nuevo sin
+ * considerarlo repetido. Por ello, es necesaria esta clase.
  * @param <T> Tipo de los elementos almacenados en el conjunto.
  */
 public class XHashSet<T> implements Iterable<T>
