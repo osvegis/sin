@@ -46,6 +46,7 @@ private static boolean run(Sentencia sentencia, Modelo modelo,
 {
     System.out.println("\n Simbolos: "+ simbolos);
     System.out.println(  "   Modelo: "+ modelo);
+    System.out.println(  "Sentencia: "+ sentencia.toString(modelo));
     Boolean e = sentencia.evaluar(modelo);
 
     if(e != null)
