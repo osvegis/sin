@@ -161,4 +161,24 @@ public boolean get(String simbolo)
     return sb.length()==0 ? "" : sb.substring(1);
 }
 
+public String toString(Modelo m)
+{
+    StringBuilder sb = new StringBuilder();
+
+    for(Map.Entry<String,Boolean> e : m_simbolos.entrySet())
+    {
+        if(m.get(e.getKey()) == null)
+        {
+            sb.append(',');
+        
+            if(!e.getValue())
+                sb.append('!');
+
+            sb.append(e.getKey());
+        }
+    }    
+
+    return sb.length()==0 ? "" : sb.substring(1);
+}
+
 } // Clausula

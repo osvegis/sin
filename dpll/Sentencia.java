@@ -139,6 +139,28 @@ public Map<String,Boolean> clausulasUnitarias(Modelo modelo)
     return sb.length()==0 ? "" : sb.substring(1);
 }
 
+public String toString(Modelo m)
+{
+    Boolean result = evaluar(m);
+    
+    if(result != null)
+        return result.toString();
+
+    StringBuilder sb = new StringBuilder();
+    
+    for(Clausula c : m_clausulas)
+    {
+        if(c.evaluar(m) == null)
+        {
+            sb.append(",(");
+            sb.append(c.toString(m));
+            sb.append(")");
+        }
+    }
+
+    return sb.length()==0 ? "" : sb.substring(1);
+}
+
 private static void printMap(String mensaje, Map<String,Boolean> map)
 {
     System.out.println(mensaje);
