@@ -74,7 +74,6 @@ private double informacion(int positivos, int negativos)
     double inf   = 0,
            total = positivos + negativos;
 
-
     if(positivos > 0)
     {
         double pPos = positivos / total;
