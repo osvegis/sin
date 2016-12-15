@@ -28,12 +28,12 @@ public int size(int atributo)
     return m_data[atributo].m_valores.length;
 }
 
-public String getNombre(int atributo)
+public String nombre(int atributo)
 {
     return m_data[atributo].m_nombre;
 }
 
-public Object getValor(int atributo, int i)
+public Object valor(int atributo, int i)
 {
     return m_data[atributo].m_valores[i];
 }

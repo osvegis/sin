@@ -14,6 +14,8 @@ public class Ejemplos
 private final Atributos m_atributos;
 private final Data[] m_data;
 private final int m_positivos, m_negativos;
+private final double m_informacion;
+private static final double LOG2 = Math.log(2);
 
 /**
  * Construye un conjunto de ejemplos a partir de los atributos y de un
@@ -41,8 +43,9 @@ public Ejemplos(Atributos atributos, Object[][] ejemplos)
             negativos++;
     }
     
-    m_positivos = positivos;
-    m_negativos = negativos;
+    m_positivos   = positivos;
+    m_negativos   = negativos;
+    m_informacion = informacion(positivos, negativos);
 }
 
 /**
@@ -73,12 +76,12 @@ public boolean mayoria()
 }
 
 /**
- * Comprueba si todos los elementos son positivos o negativos.
+ * Comprueba si todos los ejemplos tienen la misma clasificación.
  * @return {@code true}, {@code false} o {@code null} si todos los
  *      ejemplos son positivos, negativos, o de los dos tipos,
  *      respectivamente.
  */
-public Boolean positivos()
+public Boolean clasificacion()
 {
     if(m_negativos == 0)
         return true;
@@ -109,6 +112,86 @@ public Object valor(int ejemplo, int atributo)
     return m_data[ejemplo].m_valores[atributo];
 }
 
+/**
+ * Elige el mejor atributo para separar los ejemplos.
+ * @return Índice del mejor atributo.
+ */
+public int elegirAtributo()
+{
+    int    size     = m_atributos.size(),
+           atributo = -1;
+    double ganancia = 0;
+    
+    for(int a = 0; a < size; a++)
+    {
+        double g = ganancia(a);
+
+        if(atributo == -1 || ganancia < g)
+        {
+            atributo = a;
+            ganancia = g;
+        }
+    }
+    
+    return atributo;
+}
+
+private double informacion(int positivos, int negativos)
+{
+    double inf   = 0,
+           total = positivos + negativos;
+
+    if(positivos > 0)
+    {
+        double pPos = positivos / total;
+        inf -= pPos * Math.log(pPos) / LOG2;
+    }
+
+    if(negativos > 0)
+    {
+        double pNeg = negativos / total;
+        inf -= pNeg * Math.log(pNeg) / LOG2;
+    }
+
+    return inf;
+}
+
+public double ganancia(int atributo)
+{
+    return m_informacion - resto(atributo);
+}
+
+private double resto(int atributo)
+{
+    double resto = 0;
+    
+    int numValores  = m_atributos.size(atributo),
+        numEjemplos = m_data.length;
+
+    for(int i = 0; i < numValores; i++)
+    {
+        Object vi = m_atributos.valor(atributo, i);
+        int    pi = 0,
+               ni = 0;
+
+        for(int e = 0; e < numEjemplos; e++)
+        {
+            if(vi.equals(valor(e, atributo)))
+            {
+                if(positivo(e))
+                    pi++;
+                else
+                    ni++;
+            }
+        }
+
+        double ti = pi + ni;
+        resto += (ti / numEjemplos) * informacion(pi, ni);
+    }
+
+    return resto;
+}
+
 private class Data
 {
     private final boolean m_positivo;
@@ -130,7 +213,7 @@ private class Data
             if(!m_atributos.contains(i, m_valores[i]))
             {
                 throw new IllegalArgumentException(
-                    "El atributo "+ m_atributos.getNombre(i) +
+                    "El atributo "+ m_atributos.nombre(i) +
                     " no admite el valor "+ m_valores[i] +".");
             }
         }
