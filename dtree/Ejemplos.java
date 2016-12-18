@@ -37,7 +37,7 @@ public Ejemplos(Atributos atributos, Object[][] ejemplos)
     {
         Data d = m_data[i] = new Data(ejemplos[i]);
 
-        if(d.m_positivo)
+        if(d.positivo)
             positivos++;
         else
             negativos++;
@@ -46,6 +46,51 @@ public Ejemplos(Atributos atributos, Object[][] ejemplos)
     m_positivos   = positivos;
     m_negativos   = negativos;
     m_informacion = informacion(positivos, negativos);
+}
+
+/**
+ * Construye un subconjunto con los ejemplos que tengan
+ * el valor indicado en un atributo.
+ * @param ejemplos Conjunto original.
+ * @param atributo Atributo a seleccionar.
+ * @param valor    Valor del atributo a seleccionar.
+ */
+public Ejemplos(Ejemplos ejemplos, int atributo, Object valor)
+{
+    m_atributos = new Atributos(ejemplos.m_atributos, atributo);
+    Data[] data = new Data[ejemplos.size()];
+    int    size = 0;
+
+    int positivos = 0,
+        negativos = 0;
+
+    for(int e = 0; e < size; e++)
+    {
+        if(valor.equals(ejemplos.valor(e, atributo)))
+        {
+            Data d = data[size] = new Data(ejemplos.m_data[e], atributo);
+            size++;
+
+            if(d.positivo)
+                positivos++;
+            else
+                negativos++;
+        }
+    }
+
+    m_data = Arrays.copyOfRange(data, 0, size);
+    m_positivos   = positivos;
+    m_negativos   = negativos;
+    m_informacion = informacion(positivos, negativos);
+}
+
+/**
+ * Devuelve el conjunto de atributos.
+ * @return Conjunto de atributos.
+ */
+public Atributos atributos()
+{
+    return m_atributos;
 }
 
 /**
@@ -70,7 +115,7 @@ public int size()
  * Devuelve el valor de la mayoría.
  * @return Valor de la mayoría.
  */
-public boolean mayoria()
+public boolean valorMayoria()
 {
     return m_positivos >= m_negativos;
 }
@@ -98,7 +143,7 @@ public Boolean clasificacion()
  */
 public boolean positivo(int ejemplo)
 {
-    return m_data[ejemplo].m_positivo;
+    return m_data[ejemplo].positivo;
 }
 
 /**
@@ -109,7 +154,7 @@ public boolean positivo(int ejemplo)
  */
 public Object valor(int ejemplo, int atributo)
 {
-    return m_data[ejemplo].m_valores[atributo];
+    return m_data[ejemplo].valores[atributo];
 }
 
 /**
@@ -194,29 +239,39 @@ private double resto(int atributo)
 
 private class Data
 {
-    private final boolean m_positivo;
-    private final Object[] m_valores;
+    private final boolean  positivo;
+    private final Object[] valores;
 
-    private Data(Object[] valores)
+    private Data(Object[] posValores)
     {
-        m_positivo = (Boolean)valores[0];
-        m_valores = Arrays.copyOfRange(valores, 1, valores.length);
+        positivo = (Boolean)posValores[0];
+        valores  = Arrays.copyOfRange(posValores, 1, posValores.length);
 
-        if(m_atributos.size() != m_valores.length)
+        if(m_atributos.size() != valores.length)
         {
             throw new IllegalArgumentException(
                 "El número de atributos no coincide con el de valores.");
         }
 
-        for(int i = 0; i < m_valores.length; i++)
+        for(int i = 0; i < valores.length; i++)
         {
-            if(!m_atributos.contains(i, m_valores[i]))
+            if(!m_atributos.contains(i, valores[i]))
             {
                 throw new IllegalArgumentException(
                     "El atributo "+ m_atributos.nombre(i) +
-                    " no admite el valor "+ m_valores[i] +".");
+                    " no admite el valor "+ valores[i] +".");
             }
         }
+    }
+
+    private Data(Data data, int atribExcl)
+    {
+        positivo = data.positivo;
+        valores  = new Object[data.valores.length - 1];
+        System.arraycopy(data.valores, 0, valores, 0, atribExcl);
+
+        System.arraycopy(data.valores, atribExcl + 1,
+                         valores, atribExcl, valores.length - atribExcl);
     }
 } // Data
 

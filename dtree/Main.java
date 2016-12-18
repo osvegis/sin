@@ -45,6 +45,9 @@ public static void main(String args[])
     System.out.println(ejemplos.ganancia(4));
     System.out.println(ejemplos.ganancia(8));
     System.out.println(ejemplos.elegirAtributo());
+
+    ArbolDecision arbol = new ArbolDecision(ejemplos);
+    System.out.println(arbol);
 }
 
 } // Main
