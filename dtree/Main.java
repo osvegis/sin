@@ -42,9 +42,9 @@ public static void main(String args[])
         { T, T, T, T, T, "lleno",   "$",   F, F, "burger",    "30-60" }
     });
 
-    System.out.println(ejemplos.ganancia(4));
-    System.out.println(ejemplos.ganancia(8));
-    System.out.println(ejemplos.elegirAtributo());
+    System.out.println("Ganancia Clientes: "+ ejemplos.ganancia(4));
+    System.out.println("    Ganancia Tipo: "+ ejemplos.ganancia(8));
+    System.out.println();
 
     ArbolDecision arbol = new ArbolDecision(ejemplos);
     System.out.println(arbol);

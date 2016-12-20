@@ -64,7 +64,7 @@ public Ejemplos(Ejemplos ejemplos, int atributo, Object valor)
     int positivos = 0,
         negativos = 0;
 
-    for(int e = 0; e < size; e++)
+    for(int e = 0; e < data.length; e++)
     {
         if(valor.equals(ejemplos.valor(e, atributo)))
         {
@@ -177,7 +177,7 @@ public int elegirAtributo()
             ganancia = g;
         }
     }
-    
+
     return atributo;
 }
 
