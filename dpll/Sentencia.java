@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class Sentencia
 {
-private Set<Clausula> m_clausulas = new LinkedHashSet<>();
+private final Set<Clausula> m_clausulas = new LinkedHashSet<>();
 
 /**
  * Construye una sentencia en forma normal conjuntiva.
@@ -139,6 +139,12 @@ public Map<String,Boolean> clausulasUnitarias(Modelo modelo)
     return sb.length()==0 ? "" : sb.substring(1);
 }
 
+/**
+ * Devuelve una representación de la sentencia como cadena
+ * aplicando un modelo.
+ * @param m Modelo para aplicar la terminación anticipada.
+ * @return Representación de la sentencia como cadena.
+ */
 public String toString(Modelo m)
 {
     Boolean result = evaluar(m);

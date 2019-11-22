@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class Clausula
 {
-private Map<String,Boolean> m_simbolos = new LinkedHashMap<>();
+private final Map<String,Boolean> m_simbolos = new LinkedHashMap<>();
 
 /**
  * Cláusula formada por una disyunción de literales.
@@ -161,13 +161,21 @@ public boolean get(String simbolo)
     return sb.length()==0 ? "" : sb.substring(1);
 }
 
+/**
+ * Devuelve una representación de la cláusula como cadena
+ * aplicando un modelo.
+ * @param m Modelo para aplicar la terminación anticipada.
+ * @return Representación de la cláusula como cadena.
+ */
 public String toString(Modelo m)
 {
     StringBuilder sb = new StringBuilder();
 
     for(Map.Entry<String,Boolean> e : m_simbolos.entrySet())
     {
-        if(m.get(e.getKey()) == null)
+        Boolean value = m.get(e.getKey());
+
+        if(value == null)
         {
             sb.append(',');
         
@@ -176,7 +184,11 @@ public String toString(Modelo m)
 
             sb.append(e.getKey());
         }
-    }    
+        else if(value.equals(e.getValue()))
+        {
+            return "true";
+        }
+    }
 
     return sb.length()==0 ? "" : sb.substring(1);
 }

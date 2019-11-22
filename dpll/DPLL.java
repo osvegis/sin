@@ -56,15 +56,12 @@ private static boolean run(Sentencia sentencia, Modelo modelo,
         return e;
     }
 
-    TreeSet<String> simResto = new TreeSet<>(simbolos);
-    Modelo modResto = new Modelo(modelo);
-
     Map<String,Boolean> puros = sentencia.simbolosPuros(simbolos, modelo);
 
     if(!puros.isEmpty())
     {
         System.out.println("    Puros: "+ puros);
-        return run(sentencia, modelo, modResto, simResto, puros);
+        return run(sentencia, modelo, simbolos, puros);
     }
 
     Map<String,Boolean> unitarias = sentencia.clausulasUnitarias(modelo);
@@ -72,47 +69,50 @@ private static boolean run(Sentencia sentencia, Modelo modelo,
     if(!unitarias.isEmpty())
     {
         System.out.println("Unitarias: "+ unitarias);
-        return run(sentencia, modelo, modResto, simResto, unitarias);
+        return run(sentencia, modelo, simbolos, unitarias);
     }
 
-    String primero = simResto.pollFirst();
+    String primero = simbolos.first();
 
-    return run(sentencia, modelo, modResto, simResto, primero, true) ||
-           run(sentencia, modelo, modResto, simResto, primero, false);
+    return run(sentencia, modelo, simbolos, primero, true) ||
+           run(sentencia, modelo, simbolos, primero, false);
 }
 
 private static boolean run(
-        Sentencia sentencia, Modelo modelo, Modelo modResto,
-        TreeSet<String> simResto, Map<String,Boolean> heuristica)
+        Sentencia sentencia, Modelo modelo,
+        TreeSet<String> simbolos, Map<String,Boolean> heuristica)
 {
-    simResto.removeAll(heuristica.keySet());
-    modResto.set(heuristica);
+    modelo.set(heuristica);
+    simbolos.removeAll(heuristica.keySet());
 
-    if(run(sentencia, modResto, simResto))
+    if(run(sentencia, modelo, simbolos))
     {
-        modelo.set(modResto);
         return true;
     }
     else
     {
+        modelo.remove(heuristica);
+        simbolos.addAll(heuristica.keySet());
         return false;
     }
 }
 
 private static boolean run(
-        Sentencia sentencia, Modelo modelo, Modelo modResto,
-        TreeSet<String> simResto, String primero, boolean valor)
+        Sentencia sentencia, Modelo modelo,
+        TreeSet<String> simbolos, String primero, boolean valor)
 {
-    modResto.set(primero, valor);
+    modelo.set(primero, valor);
+    simbolos.remove(primero);
     System.out.println(" Probamos: "+ primero +"="+ valor);
 
-    if(run(sentencia, modResto, simResto))
+    if(run(sentencia, modelo, simbolos))
     {
-        modelo.set(modResto);
         return true;
     }
     else
     {
+        modelo.remove(primero, valor);
+        simbolos.add(primero);
         return false;
     }
 }

@@ -18,7 +18,6 @@ public static void main(String args[])
         "B21");
     */
 
-    /*
     // Reglas del ejercicio 6.
     Sentencia sentencia = new Sentencia(
         "!A,B,E", "!B,A", "!E,A",
@@ -27,13 +26,12 @@ public static void main(String args[])
         "!E,B",
         "!B,F",
         "!B,C");
-    */
 
     //Sentencia sentencia = new Sentencia(
     //    "!A,!D", "A,B,C", "A,!B,!C", "B,!C,D", "!B,C,D");
 
-    Sentencia sentencia = new Sentencia(
-        "A,!B,!C", "!A,B,C", "!A,D", "!B,C,!D", "B,!C,!D");
+    //Sentencia sentencia = new Sentencia(
+    //    "A,!B,!C", "!A,B,C", "!A,D", "!B,C,!D", "B,!C,!D");
 
     System.out.println("Sentencia: "+ sentencia);
     Modelo modelo = new Modelo();

@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class Modelo
 {
-private Map<String,Boolean> m_simbolos = new TreeMap<>();
+private final Map<String,Boolean> m_simbolos = new TreeMap<>();
 
 /**
  * Construye un modelo vacío.
@@ -26,16 +26,6 @@ public Modelo()
  */
 public Modelo(Modelo m)
 {
-    m_simbolos.putAll(m.m_simbolos);
-}
-
-/**
- * Copia un modelo en este modelo.
- * @param m Modelo a copiar.
- */
-public void set(Modelo m)
-{
-    m_simbolos.clear();
     m_simbolos.putAll(m.m_simbolos);
 }
 
@@ -57,7 +47,11 @@ public Boolean get(String simbolo)
  */
 public void set(String simbolo, boolean valor)
 {
-    m_simbolos.put(simbolo, valor);
+    if(m_simbolos.put(simbolo, valor) != null)
+    {
+        throw new IllegalArgumentException(
+            "El símbolo "+ simbolo +" ya existe en el modelo.");
+    }
 }
 
 /**
@@ -66,7 +60,40 @@ public void set(String simbolo, boolean valor)
  */
 public void set(Map<String,Boolean> simbolos)
 {
-    m_simbolos.putAll(simbolos);
+    for(Map.Entry<String,Boolean> e : simbolos.entrySet())
+        set(e.getKey(), e.getValue());
+}
+
+/**
+ * Elimina un símbolo del modelo comprobando que tiene el valor indicado.
+ * @param simbolo Símbolo a eliminar.
+ * @param valor Valor del símbolo a eliminar.
+ */
+public void remove(String simbolo, boolean valor)
+{
+    Boolean v = m_simbolos.remove(simbolo);
+
+    if(v == null)
+    {
+        throw new IllegalArgumentException(
+            "El símbolo "+ simbolo +" no existe en el modelo.");
+    }
+
+    if(v != valor)
+    {
+        throw new IllegalArgumentException(
+            "El símbolo "+ simbolo +" no tenía el valor: "+ valor);
+    }
+}
+
+/**
+ * Elimina un conjunto de símbolos comprobando sus valores.
+ * @param simbolos Conjunto de símbolos a eliminar.
+ */
+public void remove(Map<String,Boolean> simbolos)
+{
+    for(Map.Entry<String,Boolean> e : simbolos.entrySet())
+        remove(e.getKey(), e.getValue());
 }
 
 /**
